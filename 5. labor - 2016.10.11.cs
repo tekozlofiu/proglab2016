@@ -61,7 +61,7 @@ namespace Proglab20161011
              */
 
             bool result = false;
-            string vowels = "aáeéiíuúüűoóöőAÁEÉIÍUÚÜŰOÓÖŐ";
+            string vowels = "aáeéiíuúüűoóöő";
 
             if (char.IsUpper(source))
                 source = char.ToLower(source);
