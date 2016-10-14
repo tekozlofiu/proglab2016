@@ -31,7 +31,7 @@ namespace Prog20160920
              * A hallgató nevét addig kérjük be, amíg be nem ír valamit!
              * Ne fogadjuk el névnek, hogy „Shakespeare”!
              */
-            
+
             string answer = "";
 
             do
@@ -57,39 +57,40 @@ namespace Prog20160920
             string name = Console.ReadLine();
             string welcome;
 
-            switch(name)
+            switch (name)
             {
                 case "Béla":
-                    welcome = "Szia"; 
+                    welcome = "Szia";
                     break;
                 case "Bill":
-                    welcome = "A király"; 
+                    welcome = "A király";
                     break;
                 case "Joe":
-                    welcome = "Szevasz"; 
+                    welcome = "Szevasz";
                     break;
                 case "Maldini":
-                    welcome = "Ciao"; 
+                    welcome = "Ciao";
                     break;
                 default:
-                    welcome = "Hello"; 
+                    welcome = "Hello";
                     break;
             }
-            
+
             Console.WriteLine(welcome + " " + name + "!");
             Console.ReadLine();
 
         }
-        
+
         static int randomgenerator()
         {
             Random r = new Random();
             return r.Next(0, 101);
         }
 
-        static void feldata04()
+        static void feladat04()
         {
-            /* Írjon programot, amelynek kezdetén adott egy pozitív egész szám, a „gondolt szám”.
+            /* 
+             * Írjon programot, amelynek kezdetén adott egy pozitív egész szám, a „gondolt szám”.
              * A felhasználónak ki kell találnia, hogy mi a gondolt szám.
              * Ehhez a felhasználó megadhat számokat, melyekről a program megmondja, hogy a gondolt számnál nagyobbak, vagy kisebbek-e.
              * A program akkor ér véget, ha a felhasználó kitalálta a gondolt számot.
@@ -101,7 +102,8 @@ namespace Prog20160920
 
             Console.WriteLine("Milyen számra gondoltam? (0-100)");
 
-            do {
+            do
+            {
 
                 tipp = Console.ReadLine();
                 Console.Clear();
@@ -113,14 +115,15 @@ namespace Prog20160920
                 else
                     Console.WriteLine("Így van! A {0} volt, amire gondoltam!", number);
             }
-            while(int.Parse(tipp) != number);
+            while (int.Parse(tipp) != number);
 
             Console.ReadLine();
         }
 
         static void feladat05()
         {
-            /* Készítsünk programot, mely beolvas a billentyűzetről két számot és egy műveleti jelet, 
+            /* 
+             * Készítsünk programot, mely beolvas a billentyűzetről két számot és egy műveleti jelet, 
              * majd kiírja a két számmal elvégzett művelet eredményét. 
              * Aműveleti jelek megkülönböztetéséhez használjunk többágú (switch, case) elágaztatást.
              */
@@ -148,7 +151,7 @@ namespace Prog20160920
                     Console.WriteLine("A ({0} {1} {2}) kifejezés eredménye {3}.", numberA, muvelet, numberB, result);
                     break;
                 case '/':
-                    if(numberB == 0)
+                    if (numberB == 0)
                         Console.WriteLine("Nullával nem lehet osztani");
                     else
                     {
@@ -174,7 +177,8 @@ namespace Prog20160920
 
         static void feladat06()
         {
-            /* Írjon programot, amely egy pozitív egész számnak kiszámítja
+            /* 
+             * Írjon programot, amely egy pozitív egész számnak kiszámítja
              * valamely pozitív egész kitevőjű hatványát, illetve a faktoriálisát!
              * Az aktuális értékeket a felhasználó adhatja meg.
             */
@@ -192,7 +196,7 @@ namespace Prog20160920
             while (i < power)
             {
                 result = result * number;
-                i = i + 1; 
+                i = i + 1;
             }
 
             Console.WriteLine("{0} szám {1}. hatványa {2}", number, power, result);
@@ -200,7 +204,8 @@ namespace Prog20160920
             result = number;
             i = number;
 
-            while (i > 1) {
+            while (i > 1)
+            {
                 i = i - 1;
                 result = result * i;
             }
@@ -212,7 +217,8 @@ namespace Prog20160920
 
         static void feladat07()
         {
-            /* Készítsen programot, amely két bekért pozitív egész számnak
+            /* 
+             * Készítsen programot, amely két bekért pozitív egész számnak
              * meghatározza a legnagyobb közös osztóját és a legkisebb közös többszörösét!
              */
 
@@ -223,7 +229,7 @@ namespace Prog20160920
             Console.WriteLine("Adj meg még egy számot");
             numberB = int.Parse(Console.ReadLine());
             Console.Clear();
-            
+
             r = numberA;
             while (r != 0)
             {
@@ -233,19 +239,21 @@ namespace Prog20160920
             }
             Console.WriteLine("LNKO: " + numberB);
             Console.ReadLine();
-        
+
 
         }
 
         static void feladat08()
         {
             /* Írjon programot, amely a Fibonacci sorozatnak meghatározza valamely elemét! */
-            
+
         }
 
         static void feladat09()
         {
-            /* Készítsen programot, mely egy pozitív egész számnak kiírja az összes osztóját! */
+            /* 
+             * Készítsen programot, mely egy pozitív egész számnak kiírja az összes osztóját! 
+             */
 
             int A, B = 1;
 
@@ -265,9 +273,15 @@ namespace Prog20160920
 
         static void Main(string[] args)
         {
+            feladat01();
+            feladat02();
+            feladat03();
+            feladat04();
+            feladat05();
+            feladat06();
+            feladat07();
+            feladat08();
             feladat09();
         }
     }
 }
-
-
