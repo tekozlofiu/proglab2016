@@ -146,10 +146,8 @@ namespace Proglab20161011
             // ez egy speciális eset, csak tökéletes egyezésre (pl. "gézakékazég")
 
             for (int i = 0; i < (source.Length) / 2 && result == true; i++)
-            {
                 if (source[i] != source[source.Length - 1 - i])
                     result = false;
-            }
 
             // vagy általánosan és rövidebben, felhasználva a korábban megírt függvényeinket
 
