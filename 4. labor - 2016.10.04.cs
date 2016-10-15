@@ -157,12 +157,15 @@ namespace Proglab20161004
         static bool isOver(bool[,] game)
         {
             // A metódus vizsgálja, hogy minden mező *-gá vált-e
-
+            
+            bool gameover = false;
+            
             for (int i = 0; i < game.GetLength(0); i++)
                 for (int j = 0; j < game.GetLength(1); j++)
-                    if (game[i, j] == false)
-                        return false;
-            return true;
+                    if (game[i, j] == true)
+                        gameover false;
+            
+            return gameover;
         }
 
 
