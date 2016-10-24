@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace MintaZH
 {
-    //Minta ZH sor a Programozás I. tárgy első nagy zh-jához
+    // Minta ZH sor a Programozás I. tárgy első nagy zh-jához
+    // (nem szeretem a magyarValtozoNeveket, de ha már a feladat így van megadva, maradok ennél)
 
     class Program
     {
+        // Randomgenerátor
         static Random rng = new Random();
 
-        static void TombVéletlenElemCsere(int[,] tomb, int hetIndex, int napIndexA, int napIndexB)
+        static void TombElemcsere(int[,] tomb, int hetIndex, int napIndexA, int napIndexB)
         {
             // Segédmetódus az első feladathoz
             int seged = tomb[hetIndex, napIndexA];
@@ -22,8 +24,6 @@ namespace MintaZH
 
         static int[,] TombVeletlenGeneral(int hetekSzama)
         {
-            // Előállít egy megfelelő méretű kétdimenziós tömböt
-            int[,] tomb = new int[hetekSzama, 7];
 
             // A hétköznapi edzéseken 3 és 10 kilométer közötti távokat teljesít.
             // A hétvégi edzéseken 8 és 30 kilométer közötti távokat fut.
@@ -31,20 +31,24 @@ namespace MintaZH
             int hetkoznapMax = 10;
             int hetvegeMin = 8;
             int hetvegeMax = 30;
+            int napokSzama = 7;
 
-            // Feltöltjük véletlen adatokkal. 
+            // Előállít egy megfelelő méretű kétdimenziós tömböt
+            int[,] tomb = new int[hetekSzama, napokSzama];
+
+            // Feltöltjük véletlen adatokkal
             for (int i = 0; i < tomb.GetLength(0); i++)
             {
                 for (int j = 2; j < tomb.GetLength(1); j++)
                     tomb[i, j] = (j < 5) ? rng.Next(hetkoznapMin, hetkoznapMax + 1) : rng.Next(hetvegeMin, hetvegeMax + 1);
 
-                // Minden héten legyen két olyan nap, amikor nem edz a futó. Legyen mondjuk minden hét első két napja
+                // Minden héten legyen két olyan nap, amikor nem edz a futó.
                 tomb[i, 0] = 0;
                 tomb[i, 1] = 0;
 
-                // Azt nem tudjuk előre, hogy melyek ezek a napok. Ezért véletlenszerűen felcserélgetjük őket
-                TombVéletlenElemCsere(tomb, i, 0, rng.Next(0, 7));
-                TombVéletlenElemCsere(tomb, i, 1, rng.Next(0, 7));
+                // Mivel nem tudjuk előre, hogy melyek ezek a napok, ezért véletlenszerűen felcserélgetjük őket
+                TombElemcsere(tomb, i, 0, rng.Next(0, 7));
+                TombElemcsere(tomb, i, 1, rng.Next(0, 7));
             }
 
             return tomb;
@@ -73,7 +77,6 @@ namespace MintaZH
         static int OsszesKilometer(int[,] lefutottTavok)
         {
             // Megadja, hogy a futó összesen hány kilométert futott le.
-            // Sorozatszámítás egyszerű programozási tétel
             int osszesTav = 0;
 
             for (int i = 0; i < lefutottTavok.GetLength(0); i++)
@@ -86,7 +89,6 @@ namespace MintaZH
         static int HosszuFutasokSzama(int[,] lefutottTavok)
         {
             // Megadja, hogy a futó hány alkalommal edzett 15 kilométernél hosszabb távon.
-            // Megszámlálás egyszerű programozási tétel
             int futasokSzama = 0;
 
             for (int i = 0; i < lefutottTavok.GetLength(0); i++)
@@ -112,7 +114,6 @@ namespace MintaZH
         static bool NovekszikE(int[] hetiTavok)
         {
             // Eldönti, hogy a hetente lefutott távok folyamatosan növekednek-e.
-            // Eldöntés egyszerű programozási tétel
             for (int i = 1; i < hetiTavok.Length; i++)
                 if (hetiTavok[i] > hetiTavok[i - 1])
                     return false;
@@ -123,9 +124,8 @@ namespace MintaZH
         static int[] CsokkenobeRendezes(int[] hetiTavok)
         {
             // A bemeneti tömb elemeit csökkenő sorrendben adja vissza.
-            // Egyszerű cserés rendezés
 
-            //A bemeneti tömb közben ne változzon meg! Segédtömbbe másoljuk
+            //A bemeneti tömb közben nem változhat meg, ezért segédtömbbe másoljuk
             int[] segedtomb = new int[hetiTavok.Length];
 
             for (int i = 0; i < hetiTavok.Length; i++)
@@ -147,7 +147,7 @@ namespace MintaZH
 
         static void Main(string[] args)
         {
-            //A Main() függvényböl tesztelje mindegyik elkészített metódus működését!
+            // A Main() függvényböl tesztelje mindegyik elkészített metódus működését!
 
             int[,] lefutottTavok = TombVeletlenGeneral(5);
             Console.WriteLine(TombKiir(lefutottTavok));
