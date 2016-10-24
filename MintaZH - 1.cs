@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MintaZH
 {
     // Minta ZH sor a Programozás I. tárgy első nagy zh-jához
-    // (nem szeretem a magyarValtozoNeveket, de ha már a feladat így van megadva, maradok ennél)
+    // (nem szeretem a magyarValtozoNeveket, de ha már a feladatot így adták meg, maradok ennél)
 
     class Program
     {
