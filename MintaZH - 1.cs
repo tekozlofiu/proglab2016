@@ -66,6 +66,9 @@ namespace MintaZH
         static void TombModosit(int hetIndex, int napIndex, int[,] lefutottTavok)
         {
             // Az adott heti és adott napi edzés távját lehet módosítani a metódus segítségével.
+            
+            // Itt valamiért a feladat nem ad át értéket, hogy mire módosítsuk.
+            // Ez nem tudom szándékos vagy véletlen, úgy veszem hogy szándékos, tehát a metóduson belül kérjük be a hiányzó adatot.
             Console.WriteLine("Mire módosítod a(z) {0}. hét {1}. napjának értékét: ", hetIndex + 1, napIndex + 1);
             lefutottTavok[hetIndex, napIndex] = int.Parse(Console.ReadLine());
         }
