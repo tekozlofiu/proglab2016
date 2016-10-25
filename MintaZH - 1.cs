@@ -111,7 +111,7 @@ namespace MintaZH
         {
             // Eldönti, hogy a hetente lefutott távok folyamatosan növekednek-e.
             for (int i = 1; i < hetiTavok.Length; i++)
-                if (hetiTavok[i] > hetiTavok[i - 1])
+                if (hetiTavok[i] < hetiTavok[i - 1])
                     return false;
 
             return true;
