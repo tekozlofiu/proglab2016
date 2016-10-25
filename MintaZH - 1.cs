@@ -13,18 +13,9 @@ namespace MintaZH
     {
         // Randomgenerátor
         static Random rng = new Random();
-
-        static void TombElemcsere(int[,] tomb, int hetIndex, int napIndexA, int napIndexB)
-        {
-            // Segédmetódus az első feladathoz
-            int seged = tomb[hetIndex, napIndexA];
-            tomb[hetIndex, napIndexA] = tomb[hetIndex, napIndexB];
-            tomb[hetIndex, napIndexB] = seged;
-        }
-
+        
         static int[,] TombVeletlenGeneral(int hetekSzama)
         {
-
             // A hétköznapi edzéseken 3 és 10 kilométer közötti távokat teljesít.
             // A hétvégi edzéseken 8 és 30 kilométer közötti távokat fut.
             int hetkoznapMin = 3;
@@ -32,7 +23,11 @@ namespace MintaZH
             int hetvegeMin = 8;
             int hetvegeMax = 30;
             int napokSzama = 7;
-
+            
+            // Minden héten legyen két olyan nap, amikor nem edz a futó.
+            int egyikNapIndexe;
+            int masikNapIndexe;
+            
             // Előállít egy megfelelő méretű kétdimenziós tömböt
             int[,] tomb = new int[hetekSzama, napokSzama];
 
@@ -43,12 +38,13 @@ namespace MintaZH
                     tomb[i, j] = (j < 5) ? rng.Next(hetkoznapMin, hetkoznapMax + 1) : rng.Next(hetvegeMin, hetvegeMax + 1);
 
                 // Minden héten legyen két olyan nap, amikor nem edz a futó.
-                tomb[i, 0] = 0;
-                tomb[i, 1] = 0;
+                egyikNapIndexe = rng.Next(hetkoznapMin, hetkoznapMax + 1);
+                do
+                    masikNapIndexe = rng.Next(hetkoznapMin, hetkoznapMax + 1);
+                while(egyikNapIndexe == masikNapIndexe)
 
-                // Mivel nem tudjuk előre, hogy melyek ezek a napok, ezért véletlenszerűen felcserélgetjük őket
-                TombElemcsere(tomb, i, 0, rng.Next(0, 7));
-                TombElemcsere(tomb, i, 1, rng.Next(0, 7));
+                tomb[i, egyikNapIndexe] = 0;
+                tomb[i, masikNapIndexe] = 0;
             }
 
             return tomb;
