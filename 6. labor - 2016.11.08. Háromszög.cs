@@ -4,24 +4,40 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Proglab20161108
+namespace Proglab20161108_haromszog
 {
-    /* 
-     * Készítsünk Háromszög osztályt, amely egy háromszöghöz tárolja a három oldal hosszúságát! Legyen képes kerület, terület számítására.
-     */
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Háromszög készítése megadott oldalakkal
+            Háromszög h1 = new Háromszög(3, 4, 5);
+            h1.Kiírat();
 
+            // Egészítse ki a Háromszög osztályt egy olyan konstruktorral amely véletlenszerű (0-100 közötti) oldalhosszúsággal rendelkező háromszöget generál. 
+            Háromszög h2 = new Háromszög();
+            h2.Kiírat();
+            
+            Console.ReadLine();
+        }
+    }
+    
     class Háromszög
     {
-        private double a, b, c;
-        
-        // Konstruktor
+        /* 
+         * Készítsünk Háromszög osztályt, amely egy háromszöghöz tárolja a három oldal hosszúságát! Legyen képes kerület, terület számítására.
+         */
+
+        double a, b, c;
+
+        // Konstruktor I.
         public Háromszög(int a, int b, int c)
         {
             this.a = a;
             this.b = b;
             this.c = c;
         }
-        
+
         // Kerület
         public double Kerület()
         {
@@ -35,15 +51,23 @@ namespace Proglab20161108
             return Math.Sqrt(s * (s - a) * (s - b) * (s - c));
         }
 
+        public void Kiírat()
+        {
+            Console.WriteLine("A háromszög kerülete: {0}", Kerület());
+            Console.WriteLine("A háromszög területe: {0}", Terület());
+            Console.WriteLine("A háromszög oldalai:  {0}, {1} és {2}.", A, B, C);
+            Console.WriteLine();
+        }
+
         /*
          * Egészítse ki a Háromszög osztályt egy olyan konstruktorral, 
          * amely véletlenszerű (0-100 közötti) oldalhosszúsággal rendelkező háromszöget generál. 
          * A keletkező háromszögnek szerkeszthetőnek kell lennie! 
          */
 
-        private static Random rng = new Random();
+        static Random rng = new Random();
 
-        // Konstruktor
+        // Konstruktor II.
         public Háromszög()
         {
             do
@@ -56,7 +80,7 @@ namespace Proglab20161108
         }
 
         // Szerkeszthető, ha bármely oldal kisebb a másik két oldal összegénél
-        private bool Szerkeszthető()
+        bool Szerkeszthető()
         {
             return (a < b + c) && (b < a + c) && (c < b + a);
         }
