@@ -11,7 +11,6 @@ namespace MintZH2
     {
         static void Main(string[] args)
         {
-
             Szerkesztőség tesztSzerkesztőség = new Szerkesztőség();
             Console.WriteLine(tesztSzerkesztőség.Megjelenít());
             Console.WriteLine("Akkor vegyük fel új embereket!\n");
@@ -198,40 +197,6 @@ namespace MintZH2
                 összesítés += item.TetszésiIndex;
 
             return összesítés;
-        }
-
-        public int HetiMaxSport()
-        {
-            // metódus - meghatározzam hogy melyik napon írt a sportról legtöbbet az újságíró
-
-            int[] naponkéntiSportCikkekSzáma = new int[7];
-
-            foreach (var item in hetiCikkek)
-                if (item.CikkTípus == "Sport")
-                    switch (item.Nap)
-                    {
-                        case "Hétfő": naponkéntiSportCikkekSzáma[0]++; break;
-                        case "Kedd": naponkéntiSportCikkekSzáma[1]++; break;
-                        case "Szerda": naponkéntiSportCikkekSzáma[2]++; break;
-                        case "Csütörtök": naponkéntiSportCikkekSzáma[3]++; break;
-                        case "Péntek": naponkéntiSportCikkekSzáma[4]++; break;
-                        case "Szombat": naponkéntiSportCikkekSzáma[5]++; break;
-                        case "Vasárnap": naponkéntiSportCikkekSzáma[6]++; break;
-                        default:
-                            break;
-                    }
-
-            int maxIndex = 0;
-            int maxÉrték = 0;
-
-            for (int i = 0; i < naponkéntiSportCikkekSzáma.Length; i++)
-                if (maxÉrték < naponkéntiSportCikkekSzáma[i])
-                {
-                    maxÉrték = naponkéntiSportCikkekSzáma[i];
-                    maxIndex = i;
-                }
-
-            return maxIndex;
         }
 
         public string Megjelenít()
