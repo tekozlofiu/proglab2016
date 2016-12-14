@@ -11,50 +11,24 @@ namespace MintZH2
     {
         static void Main(string[] args)
         {
+
             Szerkesztőség tesztSzerkesztőség = new Szerkesztőség();
             Console.WriteLine(tesztSzerkesztőség.Megjelenít());
             Console.WriteLine("Akkor vegyük fel új embereket!\n");
 
-            /* Tesztbemenet 
-            
-@Kiss_József#Sport!Szerda:6
-@Nagy_Imre#Sport!Kedd:8
-@Elek_Sándor#Gazdaság!Vasárnap:1
-@Kiss_József#Sport!Szerda:10
-@Gál_Tamás#Belföld!Péntek:3
-@Kiss_József#Sport!Szerda:7
-@Gál_Tamás#Külföld!Csütörtök:11
-@Kiss_József#Sport!Szerda:6
-@Nagy_Imre#Technika!Kedd:8
-@Elek_Sándor#Gazdaság!Szombat:1
-@Kiss_József#Sport!Szerda
-@Elek_Sándor#Gazdaság!Hétfő:1
-@Nagy_Imre#Technika!Kedd:8
-@Nagy_Imre#Technika!Kedd:8
-@Nagy_Imre#Sport!Hétfő:12
-@Nagy_Imre#Technika!Kedd:8
-@Gál_Tamás#Külföld!Péntek:11
-@Gál_Tamás#Külföld!Csütörtök:9
-@Elek_Sándor#Gazdaság!Hétfő:1
-@Gál_Tamás#Külföld!Péntek:7
-
-*/
             ÜzenetFeldolgozó tesztAdatok = new ÜzenetFeldolgozó("bemenet.txt");
             Console.WriteLine(tesztAdatok.Megjelenít());
 
             while (tesztAdatok.VanÜzenet())
                 tesztSzerkesztőség.ÚjCikk(tesztAdatok.ÜzenetFeldolgoz());
 
-            Console.WriteLine(tesztSzerkesztőség.Megjelenít());
+            Console.WriteLine("A szerkesztőség tagjai:\n");
 
-            string[,] összesCikk = tesztSzerkesztőség.ÖsszesCikk();
-            int n = 0;
-            foreach (var item in összesCikk)
-            {
-                Console.Write(item + "\t");
-                n++;
-                if (n % 4 == 0) Console.Write("\n");
-            }
+            string összesCikk = tesztSzerkesztőség.Megjelenít();
+            // Ha műveleteket akarunk végezni, az összes cikket \n és \t mentén fel kell darabolni egy tömbbe
+
+            Console.WriteLine(összesCikk);
+            
             Console.ReadKey();
         }
     }
@@ -122,17 +96,6 @@ namespace MintZH2
         string nap;
         int tetszésiIndex;
 
-        // osztályszintű tag, az összes létrehozott cikk számát tárolja
-        static int cikkekÖsszSzáma = 0;
-        
-        public static int CikkekÖsszSzáma
-        {
-            get
-            {
-                return cikkekÖsszSzáma;
-            }
-        }
-
         // tulajdonságok - csak olvasható
         public string CikkTípus
         {
@@ -153,7 +116,6 @@ namespace MintZH2
         {
             // konstruktor
             Feldolgoz(cikk);
-            cikkekÖsszSzáma++;
         }
 
         void Feldolgoz(string cikk)
@@ -187,13 +149,7 @@ namespace MintZH2
             // csak olvasható tulajdonság
             get { return név; }
         }
-
-        public int CikkekSzám
-        {
-            get { return cikkekSzám; }
-            set { CikkekSzám = value; }
-        }
-
+        
         public Cikk[] HetiCikkek
         {
             get { return hetiCikkek; }
@@ -223,16 +179,48 @@ namespace MintZH2
             return összesítés;
         }
 
+        public int HetiMaxSport()
+        {
+            // metódus - meghatározzam hogy melyik napon írt a sportról legtöbbet az újságíró
+
+            int[] naponkéntiSportCikkekSzáma = new int[7];
+
+            foreach (var item in hetiCikkek)
+                if (item.CikkTípus == "Sport")
+                    switch (item.Nap)
+                    {
+                        case "Hétfő": naponkéntiSportCikkekSzáma[0]++; break;
+                        case "Kedd": naponkéntiSportCikkekSzáma[1]++; break;
+                        case "Szerda": naponkéntiSportCikkekSzáma[2]++; break;
+                        case "Csütörtök": naponkéntiSportCikkekSzáma[3]++; break;
+                        case "Péntek": naponkéntiSportCikkekSzáma[4]++; break;
+                        case "Szombat": naponkéntiSportCikkekSzáma[5]++; break;
+                        case "Vasárnap": naponkéntiSportCikkekSzáma[6]++; break;
+                        default:
+                            break;
+                    }
+
+            int maxIndex = 0;
+            int maxÉrték = 0;
+
+            for (int i = 0; i < naponkéntiSportCikkekSzáma.Length; i++)
+                if (maxÉrték < naponkéntiSportCikkekSzáma[i])
+                {
+                    maxÉrték = naponkéntiSportCikkekSzáma[i];
+                    maxIndex = i;
+                }
+
+            return maxIndex;
+        }
+
         public string Megjelenít()
         {
             // metódus - visszaadja az újságíró nevének és heti cikkeinek adatatit.
-            string adatok = "Név: " + név + "\n";
-            if (cikkekSzám > 0)
-                for (int i = 0; i < cikkekSzám; i++)
-                    adatok += "Rovat: " + hetiCikkek[i].CikkTípus + "\tNap: " + hetiCikkek[i].Nap + "\tIndex: " + hetiCikkek[i].TetszésiIndex + "\n";
-            else
-                adatok = "Nem írt még cikket.";
-            return adatok + "\n";
+            string adatok = "";
+            for (int i = 0; i < cikkekSzám; i++)
+              adatok += név + "\t" + hetiCikkek[i].CikkTípus + "\t" + hetiCikkek[i].Nap + "\t" + hetiCikkek[i].TetszésiIndex + "\n";
+
+            return adatok;
         }
     }
 
@@ -291,44 +279,15 @@ namespace MintZH2
         public string Megjelenít()
         {
             // metódus - visszaadja a szerkesztőség adatait
-            string szerkesztőség = "A szerkesztőség tagjai:\n";
+            string szerkesztőség = "";
 
             if (újságírókSzáma > 0)
-            {
-                for (int i = 0; i < újságírókSzáma; i++)
-                    szerkesztőség += újságírók[i].Név + "\n";
-
-                szerkesztőség += "Az átaluk írt cikkek:\n\n";
-
                 for (int i = 0; i < újságírókSzáma; i++)
                     szerkesztőség += újságírók[i].Megjelenít();
-            }
             else
                 szerkesztőség += "Egyelőre senki";
 
-            return szerkesztőség + "\n";
-        }
-
-        public string[,] ÖsszesCikk()
-        {
-            // Saját metódus, aggregálja a szerkesztőség összes cikkét
-
-            string[,] cikkek = new string[Cikk.CikkekÖsszSzáma, 4];
-            int k = 0;
-
-            for (int i = 0; i < újságírókSzáma; i++)
-            {
-                for (int j = 0; j < újságírók[i].CikkekSzám; j++)
-                {
-                    cikkek[k, 3] = újságírók[i].Név;
-                    cikkek[k, 2] = újságírók[i].HetiCikkek[j].CikkTípus;
-                    cikkek[k, 1] = újságírók[i].HetiCikkek[j].Nap;
-                    cikkek[k, 0] = újságírók[i].HetiCikkek[j].TetszésiIndex.ToString();
-                    k++;
-                }
-            }
-            
-            return cikkek;
+            return szerkesztőség;
         }
     }
 }
