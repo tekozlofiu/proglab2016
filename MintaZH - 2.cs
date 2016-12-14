@@ -3,271 +3,343 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
-namespace MintaZH2
+namespace MintZH2
 {
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            Szerkesztőség tesztSzerkesztőség = new Szerkesztőség();
+            Console.WriteLine(tesztSzerkesztőség.Megjelenít());
+            Console.WriteLine("Akkor vegyük fel új embereket!\n");
+
+            ÜzenetFeldolgozó tesztAdatok = new ÜzenetFeldolgozó("bemenet.txt");
+            Console.WriteLine(tesztAdatok.Megjelenít());
+
+            while (tesztAdatok.VanÜzenet())
+                tesztSzerkesztőség.ÚjCikk(tesztAdatok.ÜzenetFeldolgoz());
+
+            Console.WriteLine(tesztSzerkesztőség.Megjelenít());
+
+            string[,] összesCikk = tesztSzerkesztőség.ÖsszesCikk();
+            int n = 0;
+            foreach (var item in összesCikk)
+            {
+                Console.Write(item + "\t");
+                n++;
+                if (n % 4 == 0) Console.Write("\n");
+            }
+            Console.ReadKey();
+        }
+    }
+
     class ÜzenetFeldolgozó
     {
-        string üzenet;                              // a vezetőedzőtől érkezett még feldolgozatlan üzenetet tároljuk
-
-        public ÜzenetFeldolgozó(string bemenet)     // Kosntruktor
-        {
-            /* ÜzenetFeldolgozó(string) konstruktor, melyben kezdeti érték adható az üzenetnek.
-Amennyiben a paraméter *.txt formátumú, akkor azon fájl nevét jelöli, melyben az
-edzések adatai található. Ilyen esetben a konstruktor a fájl egyes soraiból előállítja az üzenet
-adattagot */
-            this.üzenet = bemenet;
-        }
+        // adattag - a még feldolgozatlan üzenetek
+        string üzenet;
 
         public string Üzenet
         {
-            // Üzenet csak írható tulajdonság, mely a korábbi üzenethez hozzáfűzi az új üzenetet
-
+            // csak írható tulajdonság - a korábbi üzenethez fűzi az újat
             set { üzenet += value; }
+        }
+
+        public ÜzenetFeldolgozó(string üzenet)
+        {
+            /* konstruktor - kezdeti érték adható az üzenetnek
+             * Amennyiben a paraméter *.txt formátumú, akkor azon fájl nevét jelöli,
+             * melyben az edzések adatai található. 
+             * Ilyen esetben a konstruktor a fájl egyes soraiból előállítja az üzenet adattagot 
+             */
+
+            if (!üzenet.EndsWith(".txt"))
+                this.üzenet = üzenet;
+            else
+            {
+                StreamReader sr = new StreamReader(üzenet);
+                while (!sr.EndOfStream)
+                    Üzenet = sr.ReadLine();
+                sr.Close();
+            }
         }
 
         public bool VanÜzenet()
         {
-            // VanÜzenet() metódus, mely megadja, hogy van-e még feldolgozatlan üzenet
-            return (üzenet.Length > 0); 
+            // metódus - megadja, hogy van-e még feldolgozatlan üzenet?
+            return (üzenet.Length > 0);
         }
 
-        public string Feldolgoz()
+        public string ÜzenetFeldolgoz()
         {
-            // Feldolgoz() metódus, mely visszaad egy edzésre vonatkozó üzenetrészt elhagyva azt az üzenet elejéről 
+            // metódus - visszaad egy üzenetrészt, elhagyva az üzenet elejéről
+            string egySor = üzenet.Split('@')[1];
 
-            string aktuálisÜzenet = üzenet.Split('@')[1];
+            üzenet = üzenet.Substring(egySor.Length + 1);
 
-            üzenet = üzenet.Substring(aktuálisÜzenet.Length + 1);
-
-            return aktuálisÜzenet;
+            return egySor;
         }
 
         public string Megjelenít()
         {
-            // Megjelenít() metódus, mely visszaad egy szöveget az üzenet megjelenítése érdekében
-
-            return üzenet;
+            // medótud - visszaad egy szöveget az üzenet megjelenítése érdekében
+            return "Feldolgozandó üzenet:\n\n" + üzenet + "\n";
         }
     }
 
-    class Edzés
+    class Cikk
     {
-        static Random randomgenerator = new Random();
+        // random generátor
+        static Random rng = new Random();
 
-        // sportág, nap és táv adattag
-
-        string sportág;
+        // adattagok
+        string cikkTípus;
         string nap;
-        int táv;
+        int tetszésiIndex;
 
-        // Táv, Nap és Sportág csak olvasható tulajdonságok
-
-        public string Sportág { get { return sportág; } }
-        public string Nap { get { return nap; } }
-        public int Táv { get { return táv; } }
-
-        private void Feldolgoz(string bemenet)
-        {            
-            // a bemenetként kapott stringet feldaraboljuk a három elválasztó karakter [ #, !, : ] mentén
-
-            string[] darabok = bemenet.Split('#', '!', ':');
-            
-            this.sportág    = darabok[1];
-            this.nap        = darabok[2];
-
-            if (bemenet.Contains(':'))
+        // osztályszintű tag, az összes létrehozott cikk számát tárolja
+        static int cikkekÖsszSzáma = 0;
+        
+        public static int CikkekÖsszSzáma
+        {
+            get
             {
-                this.táv = int.Parse(darabok[3]);
-            }
-            else {
-                this.táv = randomgenerator.Next(5, 11);
+                return cikkekÖsszSzáma;
             }
         }
 
-        public Edzés(string bemenet)
+        // tulajdonságok - csak olvasható
+        public string CikkTípus
         {
-            // Edzés(string) konstruktor, mely meghívja a Feldolgoz(string) metódust
-
-            Feldolgoz(bemenet);
-
+            get { return cikkTípus; }
         }
 
-        string Megjelenít()
+        public string Nap
         {
-            //Megjelenít() metódus, mely visszaad egy szöveget az adatok megjelenítése érdekében
+            get { return nap; }
+        }
 
-            return "";
+        public int TetszésiIndex
+        {
+            get { return tetszésiIndex; }
+        }
+        
+        public Cikk(string cikk)
+        {
+            // konstruktor
+            Feldolgoz(cikk);
+            cikkekÖsszSzáma++;
+        }
+
+        void Feldolgoz(string cikk)
+        {
+            // Rejtett metódus - értéket ad a osztály adattagjainak
+            string[] darabok = cikk.Split('!', ':');
+
+            cikkTípus = darabok[0];
+            nap = darabok[1];
+
+            // Ha a szöveg nem tartalmaz tetszési indexet, 1 és 10 közötti véletlen értéket kap
+            tetszésiIndex = (cikk.Contains(':')) ? int.Parse(darabok[2]) : rng.Next(1, 11);
+        }
+
+        public string Megjelenít()
+        {
+            // medótudus - visszaad egy szöveget az adatok megjelenítése érdekében
+            return "Rovat: " + cikkTípus + "\tNap: " + nap + "\tIndex: " + tetszésiIndex + "\n";
         }
     }
 
-    class Sportoló
+    class Újságíró
     {
-        // név, hetiEdzések (maximum 10 darab) és edzésSzám adattagok
+        // adattagok
         string név;
-        Edzés[] hetiEdzések = new Edzés[10];
-        int edzésSzám = 0;
+        Cikk[] hetiCikkek = new Cikk[10];
+        int cikkekSzám;
 
-        // Név csak olvasható tulajdonság
         public string Név
         {
+            // csak olvasható tulajdonság
             get { return név; }
         }
 
-        public Sportoló(string név)
+        public int CikkekSzám
         {
-            // Sportoló(string) konstruktor, mely a név értékét kapja meg
+            get { return cikkekSzám; }
+            set { CikkekSzám = value; }
+        }
+
+        public Cikk[] HetiCikkek
+        {
+            get { return hetiCikkek; }
+        }
+
+        public Újságíró(string név)
+        {
+            // konstruktor - a név értéket kapja meg
             this.név = név;
         }
 
-        public void ÚjEdzés(string bemenet)
+        public void ÚjCikk(Cikk cikk)
         {
-            // ÚjEdzés(Edzés) metódus, mely a hetiEdzések tömbbe felvesz egy új elemet
-            if (edzésSzám < 10)
-            {
-                hetiEdzések[edzésSzám] = new Edzés(bemenet);
-                edzésSzám++;
-            }
+            // medódus - a hetiCikkek tömbbe vesz fel egy elemet
+            hetiCikkek[cikkekSzám] = cikk;
+            cikkekSzám++;
         }
 
-        int HetiÖsszTáv()
+        public int HetiÖsszTetszés()
         {
-            // HetiÖsszTáv() metódus, mely meghatározza, hogy mennyi a sportoló heti össztávja
+            // metódus - megadja az újságíró heti összesített tetszési indexét
+            int összesítés = 0;
 
-            int hetiÖsszTáv = 0;
+            foreach (var item in hetiCikkek)
+                összesítés += item.TetszésiIndex;
 
-            for (int i = 0; i < edzésSzám; i++)
-            {
-                hetiÖsszTáv += hetiEdzések[i].Táv;
-            }
-
-            return hetiÖsszTáv;
+            return összesítés;
         }
 
-        string HetiMaxÚszás()
+        public int HetiMaxSport()
         {
-            int maxÚszásIndexe = 0;
-            int maxÚszásÉrtéke = 0;
+            // metódus - meghatározzam hogy melyik napon írt a sportról legtöbbet az újságíró
 
-            // HetiMaxÚszás(), mely meghatározza, hogy melyik napon úszott a legtöbbet a sportoló
+            int[] naponkéntiSportCikkekSzáma = new int[7];
 
-            for (int i = 0; i < edzésSzám; i++)
-            {
-                if (hetiEdzések[i].Sportág == "Úszás")
-                {
-                    if (hetiEdzések[i].Táv > maxÚszásÉrtéke)
+            foreach (var item in hetiCikkek)
+                if (item.CikkTípus == "Sport")
+                    switch (item.Nap)
                     {
-                        maxÚszásÉrtéke = hetiEdzések[i].Táv;
-                        maxÚszásIndexe = i;
+                        case "Hétfő": naponkéntiSportCikkekSzáma[0]++; break;
+                        case "Kedd": naponkéntiSportCikkekSzáma[1]++; break;
+                        case "Szerda": naponkéntiSportCikkekSzáma[2]++; break;
+                        case "Csütörtök": naponkéntiSportCikkekSzáma[3]++; break;
+                        case "Péntek": naponkéntiSportCikkekSzáma[4]++; break;
+                        case "Szombat": naponkéntiSportCikkekSzáma[5]++; break;
+                        case "Vasárnap": naponkéntiSportCikkekSzáma[6]++; break;
+                        default:
+                            break;
                     }
-                }
-            }
 
-            return hetiEdzések[maxÚszásIndexe].Nap;
+            int maxIndex = 0;
+            int maxÉrték = 0;
+
+            for (int i = 0; i < naponkéntiSportCikkekSzáma.Length; i++)
+                if (maxÉrték < naponkéntiSportCikkekSzáma[i])
+                {
+                    maxÉrték = naponkéntiSportCikkekSzáma[i];
+                    maxIndex = i;
+                }
+
+            return maxIndex;
         }
 
         public string Megjelenít()
         {
-            string adatok = "Név: \t\t" + név + "\n";
-            // Megjelenít() metódus, mely visszaad egy szöveget a sportoló nevének és heti edzés adatainak megjelenítése érdekében
-
-            for (int i = 0; i < edzésSzám; i++)
-            {
-                adatok += "Sportág: " + hetiEdzések[i].Sportág + " Nap: " + hetiEdzések[i].Nap + " Táv: " + hetiEdzések[i].Táv + "\n";
-            }
-
-            adatok += "Edzésszám: \t" + edzésSzám + "\n";
-            adatok += "HetiÖsszTáv: \t" + HetiÖsszTáv() + "\n";
-            adatok += "HetiMaxÚszás: \t" + HetiMaxÚszás() + "\n";
-
-            return adatok;
-
+            // metódus - visszaadja az újságíró nevének és heti cikkeinek adatatit.
+            string adatok = "Név: " + név + "\n";
+            if (cikkekSzám > 0)
+                for (int i = 0; i < cikkekSzám; i++)
+                    adatok += "Rovat: " + hetiCikkek[i].CikkTípus + "\tNap: " + hetiCikkek[i].Nap + "\tIndex: " + hetiCikkek[i].TetszésiIndex + "\n";
+            else
+                adatok = "Nem írt még cikket.";
+            return adatok + "\n";
         }
-
     }
 
-    class SportKlub
+    class Szerkesztőség
     {
-        // sportolók (maximum 10 darab) és sportolókSzáma adattagok
-
-        Sportoló[] sportolók = new Sportoló[10];
-        int sportolókSzáma = 0;
-
-        void ÚjEdzés(string bemenet)
-        // ÚjEdzés(string) metódus, mely egy edzésre vonatkozó szöveget kap és ez alapján az edzés 
-        // adatait hozzárendeli egy korábban is a klubban lévő sportolóhoz, vagy új sportolóhoz
+        // adattagok
+        Újságíró[] újságírók = new Újságíró[10];
+        int újságírókSzáma;
+        
+        public Szerkesztőség()
         {
-            if (!VanSportoló(bemenet))
-            {
-                ÚjSportoló(bemenet);
-            }
-
-            int indexe = SportolóIndex(bemenet);
-            sportolók[indexe].ÚjEdzés(bemenet);
-
+            // konstruktor
         }
 
-        bool VanSportoló(string név)
+        public void ÚjCikk(string üzenet)
         {
-            // VanSportoló(string) rejtett metódus, mely megadja, hogy az adott sportoló tagja e már a klubnak
-            for (int i = 0; i < sportolókSzáma; i++)
-            {
-                if (sportolók[i].Név == név)
-                {
+            // metódus - cikkre vonatkozó szöveget kap, hozzárendeli egy korábban szerkesztőségben lévő újságíróhoz vagy készít egy újat
+
+            string név = üzenet.Split('#')[0];
+            string cikk = üzenet.Split('#')[1];
+
+            // ha nincs még ilyen, létrehozzuk
+            if (!VanÚjságíró(név))
+                ÚjÚjságíró(név);
+
+            // hozzárendeljük
+            újságírók[ÚjságíróIndex(név)].ÚjCikk(new Cikk(cikk));
+        }
+
+        bool VanÚjságíró(string név)
+        {
+            // rejtett metódus - megadja, hogy az adott újságíró tagja-e a szerkesztőségnek
+            for (int i = 0; i < újságírókSzáma; i++)
+                if (újságírók[i].Név == név)
                     return true;
-                }
-            }
 
             return false;
         }
 
-        int SportolóIndex(string név) 
+        int ÚjságíróIndex(string név)
         {
-            for (int i = 0; i < sportolókSzáma; i++)
-            {
-                if (sportolók[i].Név == név)
+            // rejtett metódus - megadja, az adott újságíró hányadik eleme a tömbnek
+            for (int i = 0; i < újságírókSzáma; i++)
+                if (újságírók[i].Név == név)
                     return i;
-            }
-
-            return -1;  
+            return -1;
         }
 
-        void ÚjSportoló(string név)
+        void ÚjÚjságíró(string név)
         {
-            // ÚjSportoló(string) rejtett metódus felveszi a sportolót a klubba
-            if (sportolókSzáma < 10)
+            // rejtett metódus - felveszi az újságírót a szerkesztőségbe
+            újságírók[újságírókSzáma] = new Újságíró(név);
+            újságírókSzáma++;
+        }
+
+        public string Megjelenít()
+        {
+            // metódus - visszaadja a szerkesztőség adatait
+            string szerkesztőség = "A szerkesztőség tagjai:\n";
+
+            if (újságírókSzáma > 0)
             {
-                sportolók[sportolókSzáma] = new Sportoló(név);
-                sportolókSzáma++;
+                for (int i = 0; i < újságírókSzáma; i++)
+                    szerkesztőség += újságírók[i].Név + "\n";
+
+                szerkesztőség += "Az átaluk írt cikkek:\n\n";
+
+                for (int i = 0; i < újságírókSzáma; i++)
+                    szerkesztőség += újságírók[i].Megjelenít();
             }
-        } 
+            else
+                szerkesztőség += "Egyelőre senki";
 
-        string Megjelenít()
-        {
-            string adat = "";
-
-            return adat;
+            return szerkesztőség + "\n";
         }
-    }
 
-    class Program
-    {
-
-        static void Main(string[] args)
+        public string[,] ÖsszesCikk()
         {
-            /*
-            ÜzenetFeldolgozó adatok = new ÜzenetFeldolgozó("@Kiss_József#Futás!Szerda:14");
+            // Saját metódus, aggregálja a szerkesztőség összes cikkét
 
-            Sportoló József = new Sportoló("Kiss József");
+            string[,] cikkek = new string[Cikk.CikkekÖsszSzáma, 4];
+            int k = 0;
 
-            József.ÚjEdzés("#Úszás!Hétfő:12");
-            József.ÚjEdzés("#Úszás!Kedd:20");
-            József.ÚjEdzés("#Úszás!Hétfő:12");
-            József.ÚjEdzés("#Futás!Szerda:40");
-            Console.WriteLine(József.Megjelenít());
-            Console.ReadKey();
-            */
-            // @Kiss_József#Futás!Szerda:14@Nagy_Imre#Úszás!Kedd:12@Nagy_Imre#Úszás!Kedd:12@Nagy_Imre#Úszás!Kedd:12@Nagy_Imre#Úszás!Kedd:12@Nagy_Imre#Úszás!Kedd:12
+            for (int i = 0; i < újságírókSzáma; i++)
+            {
+                for (int j = 0; j < újságírók[i].CikkekSzám; j++)
+                {
+                    cikkek[k, 3] = újságírók[i].Név;
+                    cikkek[k, 2] = újságírók[i].HetiCikkek[j].CikkTípus;
+                    cikkek[k, 1] = újságírók[i].HetiCikkek[j].Nap;
+                    cikkek[k, 0] = újságírók[i].HetiCikkek[j].TetszésiIndex.ToString();
+                    k++;
+                }
+            }
+            
+            return cikkek;
         }
     }
 }
