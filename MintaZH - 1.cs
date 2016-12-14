@@ -132,16 +132,16 @@ namespace MintaZH
 
             int seged;
 
-            for (int i = 0; i < hetiTavok.Length - 1; i++)
-                for (int j = i + 1; j < hetiTavok.Length; j++)
-                    if(hetiTavok[i] < hetiTavok[j])
+            for (int i = 0; i < segedtomb.Length - 1; i++)
+                for (int j = i + 1; j < segedtomb.Length; j++)
+                    if(segedtomb[i] < segedtomb[j])
                     {
-                        seged = hetiTavok[i];
-                        hetiTavok[i] = hetiTavok[j];
-                        hetiTavok[j] = seged;
+                        seged = segedtomb[i];
+                        segedtomb[i] = segedtomb[j];
+                        segedtomb[j] = seged;
                     }
 
-            return hetiTavok;
+            return segedtomb;
         }
 
         static void Main(string[] args)
