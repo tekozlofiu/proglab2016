@@ -15,6 +15,30 @@ namespace MintZH2
             Console.WriteLine(tesztSzerkesztőség.Megjelenít());
             Console.WriteLine("Akkor vegyük fel új embereket!\n");
 
+            /* Tesztbemenet 
+            
+@Kiss_József#Sport!Szerda:6
+@Nagy_Imre#Sport!Kedd:8
+@Elek_Sándor#Gazdaság!Vasárnap:1
+@Kiss_József#Sport!Szerda:10
+@Gál_Tamás#Belföld!Péntek:3
+@Kiss_József#Sport!Szerda:7
+@Gál_Tamás#Külföld!Csütörtök:11
+@Kiss_József#Sport!Szerda:6
+@Nagy_Imre#Technika!Kedd:8
+@Elek_Sándor#Gazdaság!Szombat:1
+@Kiss_József#Sport!Szerda
+@Elek_Sándor#Gazdaság!Hétfő:1
+@Nagy_Imre#Technika!Kedd:8
+@Nagy_Imre#Technika!Kedd:8
+@Nagy_Imre#Sport!Hétfő:12
+@Nagy_Imre#Technika!Kedd:8
+@Gál_Tamás#Külföld!Péntek:11
+@Gál_Tamás#Külföld!Csütörtök:9
+@Elek_Sándor#Gazdaság!Hétfő:1
+@Gál_Tamás#Külföld!Péntek:7
+
+*/
             ÜzenetFeldolgozó tesztAdatok = new ÜzenetFeldolgozó("bemenet.txt");
             Console.WriteLine(tesztAdatok.Megjelenít());
 
