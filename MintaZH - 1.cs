@@ -70,7 +70,10 @@ namespace MintaZH
             // Itt valamiért a feladat nem ad át értéket, hogy mire módosítsuk.
             // Ez nem tudom szándékos vagy véletlen, úgy veszem hogy szándékos, tehát a metóduson belül kérjük be a hiányzó adatot.
             Console.WriteLine("Mire módosítod a(z) {0}. hét {1}. napjának értékét: ", hetIndex + 1, napIndex + 1);
-            lefutottTavok[hetIndex, napIndex] = int.Parse(Console.ReadLine());
+            
+            // csak akkor módosítunk a heti és napi index is valós adat
+            if(hetIndex < lefutottTavok.GetLength(0) && napIndex < lefutottTavok.GetLength(1))
+                lefutottTavok[hetIndex, napIndex] = int.Parse(Console.ReadLine());
         }
 
         static int OsszesKilometer(int[,] lefutottTavok)
