@@ -113,6 +113,7 @@ namespace MintaZH
         static bool NovekszikE(int[] hetiTavok)
         {
             // Eldönti, hogy a hetente lefutott távok folyamatosan növekednek-e.
+            // A vizsgálatot a második elemtől kezdjük
             for (int i = 1; i < hetiTavok.Length; i++)
                 if (hetiTavok[i] < hetiTavok[i - 1])
                     return false;
@@ -122,17 +123,15 @@ namespace MintaZH
         
         static int[] CsokkenobeRendezes(int[] hetiTavok)
         {
-            // A bemeneti tömb elemeit csökkenő sorrendben adja vissza.
-
             //A bemeneti tömb közben nem változhat meg, ezért segédtömbbe másoljuk
-            int[] segedtomb = new int[hetiTavok.Length];
+            int[] segedtomb = hetiTavok;
 
-            for (int i = 0; i < hetiTavok.Length; i++)
-                segedtomb[i] = hetiTavok[i];
-
+            // A bemeneti tömb elemeit csökkenő sorrendben adja vissza.
+            // A cserékhez szükségünk lesz egy segédre
             int seged;
 
             for (int i = 0; i < segedtomb.Length - 1; i++)
+                // a belső ciklus nem a nulladik indextől, hanem i+1-től indul
                 for (int j = i + 1; j < segedtomb.Length; j++)
                     if(segedtomb[i] < segedtomb[j])
                     {
