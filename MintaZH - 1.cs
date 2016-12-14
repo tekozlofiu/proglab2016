@@ -38,10 +38,10 @@ namespace MintaZH
                     tomb[i, j] = (j < 5) ? rng.Next(hetkoznapMin, hetkoznapMax + 1) : rng.Next(hetvegeMin, hetvegeMax + 1);
 
                 // Minden héten legyen két olyan nap, amikor nem edz a futó.
-                egyikNapIndexe = rng.Next(hetkoznapMin, hetkoznapMax + 1);
+                egyikNapIndexe = rng.Next(0, napokSzama);
                 do
-                    masikNapIndexe = rng.Next(hetkoznapMin, hetkoznapMax + 1);
-                while(egyikNapIndexe == masikNapIndexe)
+                    masikNapIndexe = rng.Next(0, napokSzama);
+                while(egyikNapIndexe == masikNapIndexe);
 
                 tomb[i, egyikNapIndexe] = 0;
                 tomb[i, masikNapIndexe] = 0;
